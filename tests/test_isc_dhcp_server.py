@@ -1,6 +1,7 @@
 from log_parsers.isc_dhcp_server import IscDhcpServer as Ids
 import pytest
 import re
+from datetime import datetime
 
 
 @pytest.fixture
@@ -40,7 +41,7 @@ def re_type():
 
 def metadata_tests():
     return [
-        ("date", "Jul 01 02:03:04"),
+        ("date", datetime(datetime.now().year, 7, 1, 2, 3, 4)),
         ("hostname", "hostname"),
         ("daemon_name", "dhcpd"),
     ]

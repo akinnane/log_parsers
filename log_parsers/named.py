@@ -1,4 +1,5 @@
 import re
+from dateutil.parser import parse
 
 
 class Named(object):
@@ -32,14 +33,13 @@ class Named(object):
         return fields
 
     def metadata(self, line):
-        return re.match(self.meta, line).groupdict()
+        meta = re.match(self.meta, line).groupdict()
+        meta["date"] = parse(meta["date"])
+        return meta
 
     def dns_query(self, line):
-        client_m = re.search(self.client, line)
-        query_m = re.search(self.query, line)
-        record_type_m = re.search(self.record_type, line)
         return {
-            "client": client_m["client"],
-            "query": query_m["query"],
-            "record_type": record_type_m["record_type"],
+            "client": re.search(self.client, line)[1],
+            "query": re.search(self.query, line)[1],
+            "record_type": re.search(self.record_type, line)[1],
         }

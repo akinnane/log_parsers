@@ -1,4 +1,5 @@
 import re
+from dateutil.parser import parse
 
 
 class IscDhcpServer(object):
@@ -27,13 +28,16 @@ class IscDhcpServer(object):
 
     def procecess(self, line):
         fields = {}
+        if ": DHCP" not in line:
+            return fields
         fields.update(self.metadata(line))
-        if ": DHCP" in line:
-            fields.update(self.dhcp_message(line))
+        fields.update(self.dhcp_message(line))
         return fields
 
     def metadata(self, line):
-        return re.match(self.meta, line).groupdict()
+        meta = re.match(self.meta, line).groupdict()
+        meta["date"] = parse(meta["date"])
+        return meta
 
     def dhcp_message(self, line):
         message_type_m = re.search(self.message_type, line)
