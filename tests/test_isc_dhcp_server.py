@@ -30,7 +30,7 @@ def dhcp_request():
 
 @pytest.fixture
 def ids():
-    return Ids("foo")
+    return Ids()
 
 
 @pytest.fixture
@@ -82,22 +82,7 @@ def test_ids_metadata_extracts_kv_pairs(ids, dhcp_ack_on, k, v):
 
 @pytest.mark.parametrize("k,v", dhcp_ack_on_tests())
 def test_ids_dchp_ack_extracts_kv_pairs(ids, dhcp_ack_on, k, v):
-    assert ids.dhcp_ack(dhcp_ack_on)[k] == v
-
-
-@pytest.mark.parametrize("k,v", dhcp_inform_tests())
-def test_ids_dchp_inform_extracts_kv_pairs(ids, dhcp_inform, k, v):
-    assert ids.dhcp_inform(dhcp_ack_on)[k] == v
-
-
-@pytest.mark.parametrize("k,v", dhcp_nak_tests())
-def test_ids_dchp_nak_extracts_kv_pairs(ids, dhcp_nak, k, v):
-    assert ids.dhcp_nak(dhcp_ack_on)[k] == v
-
-
-@pytest.mark.parametrize("k,v", dhcp_request_tests())
-def test_ids_dchp_request_extracts_kv_pairs(ids, dhcp_request, k, v):
-    assert ids.dhcp_request(dhcp_ack_on)[k] == v
+    assert ids.dhcp_message(dhcp_ack_on)[k] == v
 
 
 @pytest.mark.parametrize("k,v", metadata_tests() + dhcp_ack_on_tests())
